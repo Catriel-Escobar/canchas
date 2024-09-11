@@ -1,0 +1,68 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* Form.module.css */
+.formContainer {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: aliceblue;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: #0056b3;
+}
+
+.googleButton {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #db4437;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.googleButton:hover {
+  background-color: #c23321;
+}
+
+.textBasic {
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.link {
+  text-decoration: none; /* Quita el subrayado */
+  color: #5a5959; /* Usa el color del elemento padre */
+}
