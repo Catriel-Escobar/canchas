@@ -27,4 +27,7 @@ export class User {
     eager: true,
   })
   profile: Profile;
+
+  @Column({ name: 'is_active', type: 'bool', default: true })
+  isActive: boolean;
 }

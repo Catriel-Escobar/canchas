@@ -1,26 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { UserService } from 'src/user/user.service';
+import { passwordDecoder, passwordEncoder } from 'src/utils/passwordEncoder';
+import { LoginDTO, RegisterDTO, UpdatePasswordDTO } from './dto';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(private readonly userService: UserService) {}
+
+  async register(register: RegisterDTO) {
+    const user = this.userService.create(register);
+    return 'prueba registro';
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async login(loginDTO: LoginDTO) {
+    const { email, password } = loginDTO;
+    const userFound = await this.userService.findByEmail(email);
+    const isValid = passwordDecoder(password, userFound.password);
+    if ((userFound && isValid) || !userFound)
+      throw new BadRequestException('Credentials invalids');
+    return 'TODO: JWT etc.';
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async recoverPassword(email: string) {
+    const userFound = this.userService.findByEmail(email);
+    if (!userFound)
+      throw new BadRequestException(`user not found with email: ${email}`);
+    // Enviar jwt via email para poder cambiar la pw
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDTO) {
+    const { password, confirmPassword } = updatePasswordDto;
+    if (password !== confirmPassword)
+      throw new BadRequestException('Password dont match');
+    const user = this.userService.update(id, {
+      password: passwordEncoder(password),
+    });
+    return user;
   }
 }

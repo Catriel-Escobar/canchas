@@ -8,6 +8,7 @@ interface EnvVars {
   POSTGRES_DB: string;
   POSTGRES_HOST: string;
   POSTGRES_PORT: number;
+  SALT_PASSWORD: number;
 }
 
 const envsSchema = joi
@@ -18,6 +19,7 @@ const envsSchema = joi
     POSTGRES_PASSWORD: joi.string().required(),
     POSTGRES_HOST: joi.string().required(),
     POSTGRES_DB: joi.string().required(),
+    SALT_PASSWORD: joi.number().required(),
   })
   .unknown(true);
 
@@ -37,4 +39,5 @@ export const envs = {
   postgresDb: envVars.POSTGRES_DB,
   postgresPort: envVars.POSTGRES_PORT,
   postgresHost: envVars.POSTGRES_HOST,
+  saltPassword: envVars.SALT_PASSWORD,
 };
