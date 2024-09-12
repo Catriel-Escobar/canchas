@@ -2,23 +2,34 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { passwordDecoder, passwordEncoder } from 'src/utils/passwordEncoder';
 import { LoginDTO, RegisterDTO, UpdatePasswordDTO } from './dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register(register: RegisterDTO) {
-    const user = this.userService.create(register);
-    return 'prueba registro';
+    const user = await this.userService.create(register);
+    delete user.password;
+    const jwt = this.getJwtToken({ id: user.id });
+    return { user, jwt };
   }
 
   async login(loginDTO: LoginDTO) {
     const { email, password } = loginDTO;
-    const userFound = await this.userService.findByEmail(email);
-    const isValid = passwordDecoder(password, userFound.password);
-    if ((userFound && isValid) || !userFound)
+    const user = await this.userService.findByEmail(email);
+    const isValid = passwordDecoder(password, user.password);
+    if ((user && isValid) || !user)
       throw new BadRequestException('Credentials invalids');
-    return 'TODO: JWT etc.';
+
+    delete user.password;
+
+    const jwt = this.getJwtToken({ id: user.id });
+    return { user, jwt };
   }
 
   async recoverPassword(email: string) {
@@ -36,5 +47,11 @@ export class AuthService {
       password: passwordEncoder(password),
     });
     return user;
+  }
+
+  private getJwtToken(payload: JwtPayload) {
+    //
+    const token = this.jwtService.sign(payload);
+    return token;
   }
 }

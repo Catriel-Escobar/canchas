@@ -9,6 +9,9 @@ interface EnvVars {
   POSTGRES_HOST: string;
   POSTGRES_PORT: number;
   SALT_PASSWORD: number;
+  JWT_SECRET: string;
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
 }
 
 const envsSchema = joi
@@ -20,6 +23,9 @@ const envsSchema = joi
     POSTGRES_HOST: joi.string().required(),
     POSTGRES_DB: joi.string().required(),
     SALT_PASSWORD: joi.number().required(),
+    JWT_SECRET: joi.string().required(),
+    GOOGLE_CLIENT_ID: joi.string().required(),
+    GOOGLE_CLIENT_SECRET: joi.string().required(),
   })
   .unknown(true);
 
@@ -40,4 +46,7 @@ export const envs = {
   postgresPort: envVars.POSTGRES_PORT,
   postgresHost: envVars.POSTGRES_HOST,
   saltPassword: envVars.SALT_PASSWORD,
+  jwtSecret: envVars.JWT_SECRET,
+  googleClientId: envVars.GOOGLE_CLIENT_ID,
+  googleClientSecret: envVars.GOOGLE_CLIENT_SECRET,
 };
