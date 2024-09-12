@@ -9,7 +9,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: envs.googleClientId,
       clientSecret: envs.googleClientSecret,
-      callbackURL: 'http://localhost:3000/auth/google/callback',
+      callbackURL: 'http://localhost:3000/api/auth/google/callback',
       scope: ['email', 'profile'],
     });
   }
@@ -21,6 +21,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: VerifyCallback,
   ): Promise<any> {
     const { name, emails, photos } = profile;
+    console.log(profile);
     const user = {
       email: emails[0].value,
       firstName: name.givenName,
@@ -31,3 +32,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done(null, user);
   }
 }
+
+// import { EntityRepository, Repository } from 'typeorm';
+// import { User } from './user.entity';
+
+// @EntityRepository(User)
+// export class UserRepository extends Repository<User> {
+//   // Métodos personalizados para UserRepository
+// }

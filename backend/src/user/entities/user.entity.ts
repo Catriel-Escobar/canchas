@@ -16,7 +16,7 @@ export class User {
   @Column('text', { unique: true })
   email: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   password: string;
 
   @ManyToMany(() => Role, (role) => role.users, { eager: true })

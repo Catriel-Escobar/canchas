@@ -4,6 +4,7 @@ import { passwordDecoder, passwordEncoder } from 'src/utils/passwordEncoder';
 import { LoginDTO, RegisterDTO, UpdatePasswordDTO } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { User } from 'src/types/user-google.interface';
 
 @Injectable()
 export class AuthService {
@@ -53,5 +54,13 @@ export class AuthService {
     //
     const token = this.jwtService.sign(payload);
     return token;
+  }
+
+  async validateOrCreateUser(user: User) {
+    const { email, firstName: name } = user;
+    const userFound = await this.userService.createGoogle({ email, name });
+    delete userFound.password;
+    const jwt = this.getJwtToken({ id: userFound.id });
+    return { userFound, jwt };
   }
 }
